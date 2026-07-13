@@ -4,7 +4,9 @@ const path = require("path");
 const carpeta = path.join(process.cwd(), "data");
 
 if (!fs.existsSync(carpeta)) {
+
     fs.mkdirSync(carpeta, { recursive: true });
+
 }
 
 const archivo = path.join(carpeta, "turnos_activos.json");
