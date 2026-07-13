@@ -4,8 +4,10 @@ node_modules/
 # Variables de entorno
 .env
 
-# Archivos de datos locales
+
+# Mantener la carpeta data
 data/*.json
+!data/.gitkeep
 
 # Logs
 logs/
