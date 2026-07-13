@@ -1,6 +1,11 @@
 const fs = require("fs");
 const path = require("path");
+const carpeta = path.join(__dirname, "../../data"); 
+if (!fs.existsSync(carpeta)) {
 
+    fs.mkdirSync(carpeta, { recursive: true });
+
+}
 const archivo = path.join(__dirname, "../../data/turnos_activos.json");
 
 class PersistenciaService {
