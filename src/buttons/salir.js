@@ -48,6 +48,7 @@ module.exports = async (interaction) => {
         });
 
     }
+    
     await EmpleadosPanelService.actualizar(interaction.client);
     await interaction.reply({
 

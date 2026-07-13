@@ -57,37 +57,54 @@ class EmpleadosPanelService {
 
     static async actualizar(client) {
 
-        if (!EmpleadosPanelRepository.existe()) return;
+    try {
+
+        console.log("Actualizando panel");
+
+        if (!EmpleadosPanelRepository.existe()) {
+            console.log("No existe panel");
+            return;
+        }
 
         const datos = EmpleadosPanelRepository.obtener();
 
+        console.log(datos);
+
         const canal = await client.channels.fetch(datos.channelId);
 
-        if (!canal) return;
+        if (!canal) {
+            console.log("Canal no encontrado");
+            return;
+        }
 
         const mensaje = await canal.messages.fetch(datos.messageId);
 
-        if (!mensaje) return;
+        if (!mensaje) {
+            console.log("Mensaje no encontrado");
+            return;
+        }
+
+        console.log("Turnos:", TurnoService.listar());
 
         await mensaje.edit({
-
             embeds: [
-
                 empleadosPanelEmbed(
-
-    PanelBuilder.generar(
-
-        TurnoService.obtenerTurnosActivos()
-
-    )
-
-)
-
+                    PanelBuilder.generar(
+                        TurnoService.obtenerTurnosActivos()
+                    )
+                )
             ]
-
         });
 
+        console.log("Panel actualizado");
+
+    } catch (err) {
+
+        console.error(err);
+
     }
+
+}
 
 }
 
