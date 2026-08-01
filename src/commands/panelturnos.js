@@ -1,4 +1,4 @@
-const EmpleadosPanelService = require("../services/EmpleadosPanelService");
+const EmpleadosPanelService = require("../services/TurnoService");
 
 module.exports = {
 

@@ -1,4 +1,4 @@
-/*const EmpleadosPanelService = require("../services/EmpleadosPanelService");
+const EmpleadosPanelService = require("../services/EmpleadosPanelService");
 
 module.exports = {
 
@@ -10,4 +10,4 @@ module.exports = {
 
     }
 
-};*/
+};
