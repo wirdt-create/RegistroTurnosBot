@@ -20,6 +20,6 @@ module.exports = async (client) => {
 
         await EmpleadosPanelService.actualizar(client);
 
-    }, 1000);
+    }, 6000);
 
 };

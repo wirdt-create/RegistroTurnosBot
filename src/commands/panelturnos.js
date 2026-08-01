@@ -1,3 +1,18 @@
+const EmpleadosPanelService = require("../services/EmpleadosPanelService");
+
+module.exports = {
+
+    name: "panelturnos",
+
+    async execute(interaction) {
+
+        await EmpleadosPanelService.crear(interaction);
+
+    }
+
+};
+
+
 const {
     EmbedBuilder,
     ActionRowBuilder,

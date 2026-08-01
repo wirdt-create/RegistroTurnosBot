@@ -5,49 +5,13 @@ const TurnoService = require("./TurnoService");
 
 class EmpleadosPanelService {
 
-    static async crear(interaction) {
+static async crear(interaction) {
 
-        if (EmpleadosPanelRepository.existe()) {
+    if (EmpleadosPanelRepository.existe()) {
 
-            return interaction.reply({
+        return interaction.reply({
 
-                content: "❌ Ya existe un panel de empleados.",
-
-                ephemeral: true
-
-            });
-
-        }
-
-        const mensaje = await interaction.channel.send({
-
-            embeds: [
-
-               empleadosPanelEmbed(
-
-    PanelBuilder.generar(
-
-        TurnoService.obtenerTurnosActivos()
-
-    )
-
-)
-
-            ]
-
-        });
-
-        EmpleadosPanelRepository.registrar(
-
-            interaction.channel.id,
-
-            mensaje.id
-
-        );
-
-        await interaction.reply({
-
-            content: "✅ Panel creado correctamente.",
+            content: "❌ Ya existe un panel.",
 
             ephemeral: true
 
@@ -55,48 +19,115 @@ class EmpleadosPanelService {
 
     }
 
+    const mensaje = await interaction.channel.send({
+
+        embeds: [
+
+            empleadosPanelEmbed(
+
+                PanelBuilder.generar(
+
+                    TurnoService.obtenerTurnosActivos()
+
+                )
+
+            )
+
+        ]
+
+    });
+
+    EmpleadosPanelRepository.registrar(
+
+        interaction.channel.id,
+
+        mensaje.id
+
+    );
+
+    await interaction.reply({
+
+        content: "✅ Panel creado correctamente.",
+
+        ephemeral: true
+
+    });
+
+}
+
     static async actualizar(client) {
 
     try {
 
-        console.log("Actualizando panel");
-
-        if (!EmpleadosPanelRepository.existe()) {
-            console.log("No existe panel");
-            return;
-        }
+        if (!EmpleadosPanelRepository.existe()) return;
 
         const datos = EmpleadosPanelRepository.obtener();
 
-        console.log(datos);
-
         const canal = await client.channels.fetch(datos.channelId);
 
-        if (!canal) {
-            console.log("Canal no encontrado");
-            return;
+        if (!canal) return;
+
+        let mensaje;
+
+        try {
+
+            mensaje = await canal.messages.fetch(datos.messageId);
+
+        } catch (err) {
+
+            // El panel fue eliminado
+            if (err.code === 10008) {
+
+                console.log("⚠ Panel eliminado. Creando uno nuevo...");
+
+                const nuevoMensaje = await canal.send({
+
+                    embeds: [
+
+                        empleadosPanelEmbed(
+
+                            PanelBuilder.generar(
+                                TurnoService.obtenerTurnosActivos()
+                            )
+
+                        )
+
+                    ]
+
+                });
+
+                EmpleadosPanelRepository.registrar(
+
+                    canal.id,
+                    nuevoMensaje.id
+
+                );
+
+                console.log("✅ Panel recreado");
+
+                return;
+
+            }
+
+            throw err;
+
         }
-
-        const mensaje = await canal.messages.fetch(datos.messageId);
-
-        if (!mensaje) {
-            console.log("Mensaje no encontrado");
-            return;
-        }
-
-        console.log("Turnos:", TurnoService.listar());
 
         await mensaje.edit({
+
             embeds: [
+
                 empleadosPanelEmbed(
+
                     PanelBuilder.generar(
                         TurnoService.obtenerTurnosActivos()
                     )
-                )
-            ]
-        });
 
-        console.log("Panel actualizado");
+                )
+
+            ]
+
+        });
 
     } catch (err) {
 

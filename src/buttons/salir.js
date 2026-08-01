@@ -10,11 +10,8 @@ module.exports = async (interaction) => {
     if (!resultado.ok) {
 
         return interaction.reply({
-
             content: resultado.mensaje,
-
             ephemeral: true
-
         });
 
     }
@@ -28,28 +25,22 @@ module.exports = async (interaction) => {
     if (canal) {
 
         await canal.send({
-
             embeds: [
-
                 finEmbed(
-
                     interaction.user,
-
                     resultado.inicio,
-
                     resultado.fin,
-
                     tiempo
-
                 )
-
             ]
-
         });
 
     }
-    
-   // await EmpleadosPanelService.actualizar(interaction.client);
+
+    // Actualizar el panel
+    await EmpleadosPanelService.actualizar(interaction.client);
+
+    // Responder al usuario
     await interaction.reply({
 
         embeds: [
@@ -57,17 +48,13 @@ module.exports = async (interaction) => {
             {
 
                 color: 0xE74C3C,
-
                 title: "🔴 Has finalizado tu turno",
 
                 fields: [
 
                     {
-
                         name: "⏱ Tiempo trabajado",
-
                         value: tiempo
-
                     }
 
                 ],
